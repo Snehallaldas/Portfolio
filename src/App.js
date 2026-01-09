@@ -4,6 +4,8 @@ import { Github, Linkedin, Mail, ExternalLink, Code, Award, ChevronRight, Termin
 export default function Portfolio() {
   const [scrollY, setScrollY] = useState(0);
   const [activeSection, setActiveSection] = useState('home');
+  const [menuOpen, setMenuOpen] = useState(false);
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -74,7 +76,13 @@ export default function Portfolio() {
           <div className="text-2xl font-bold text-slate-900">
             Snehal Lal Das
           </div>
-          <div className="flex gap-8 items-center">
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="md:hidden text-2xl"
+          >
+            ☰
+          </button>
+          <div className="hidden md:flex gap-8 items-center">
             <a href="#about" className={`text-sm font-medium transition-colors ${activeSection === 'about' ? 'text-emerald-600' : 'text-slate-600 hover:text-slate-900'}`}>
               About
             </a>
@@ -101,25 +109,47 @@ export default function Portfolio() {
           </div>
         </div>
       </nav>
+      {menuOpen && (
+        <div className="md:hidden bg-white border-t">
+        {["about","projects","skills","certifications","contact"].map(item => (
+          <a
+          key={item}
+          href={`#${item}`}
+          onClick={() => setMenuOpen(false)}
+          className="block px-6 py-4 text-slate-700 hover:bg-slate-100"
+          >
+          {item.charAt(0).toUpperCase() + item.slice(1)}
+          </a>
+        ))}
+        <a
+          href="/Snehal_Das_Resume.pdf"
+          download
+          className="block px-6 py-4 text-slate-700 hover:bg-slate-100"
+        >
+          Resume
+        </a>
+      </div>
+    )}
+
 
       {/* Hero Section */}
-      <section id="home" className="pt-32 pb-20 px-6 bg-white">
+      <section id="home" className="scroll-mt-28 pt-32 pb-20 px-6 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <div className="inline-block mb-4 px-4 py-2 bg-emerald-50 text-emerald-700 text-sm font-medium rounded-full">
                 Available for Opportunities
               </div>
-              <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-4">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900 mb-4">
                 Snehal Lal Das
               </h1>
-              <h2 className="text-2xl md:text-3xl font-semibold text-slate-700 mb-6">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-slate-700 mb-6">
                 ML Engineer & Backend Developer
               </h2>
               <p className="text-lg text-slate-600 mb-8 leading-relaxed">
                 Final-year Computer Science student specializing in building production-ready ML systems with MLOps pipelines and scalable cloud architectures.
               </p>
-              <div className="flex gap-4 mb-8">
+              <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <a href="https://github.com/Snehallaldas" target="_blank" rel="noopener noreferrer" 
                    className="p-3 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">
                   <Github size={24} className="text-slate-700" />
@@ -173,7 +203,7 @@ export default function Portfolio() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 px-6 bg-slate-50">
+      <section id="about" className="scroll-mt-28 py-20 px-6 bg-slate-50">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl font-bold text-slate-900 mb-4">About Me</h2>
           <div className="w-20 h-1 bg-emerald-600 mb-8"></div>
@@ -209,7 +239,7 @@ export default function Portfolio() {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="py-20 px-6 bg-white">
+      <section id="projects" className="scroll-mt-28 py-20 px-6 bg-white">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-slate-900 mb-4">Featured Projects</h2>
           <div className="w-20 h-1 bg-emerald-600 mb-12"></div>
@@ -255,7 +285,7 @@ export default function Portfolio() {
       </section>
 
       {/* Skills Section */}
-      <section id="skills" className="py-20 px-6 bg-slate-50">
+      <section id="skills" className="scroll-mt-28 py-20 px-6 bg-slate-50">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-slate-900 mb-4">Technical Skills</h2>
           <div className="w-20 h-1 bg-emerald-600 mb-12"></div>
@@ -279,7 +309,7 @@ export default function Portfolio() {
       </section>
 
       {/* Certifications Section */}
-      <section id="certifications" className="py-20 px-6 bg-white">
+      <section id="certifications" className="scroll-mt-28 py-20 px-6 bg-white">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-slate-900 mb-4">Certifications</h2>
           <div className="w-20 h-1 bg-emerald-600 mb-12"></div>
@@ -305,7 +335,7 @@ export default function Portfolio() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 px-6 bg-slate-50">
+      <section id="contact" className="scroll-mt-28 py-20 px-6 bg-slate-50">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl font-bold text-slate-900 mb-4">Let's Connect</h2>
           <div className="w-20 h-1 bg-emerald-600 mb-8 mx-auto"></div>

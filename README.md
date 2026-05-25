@@ -1,70 +1,108 @@
-# Getting Started with Create React App
+# Modern AI/ML Portfolio 🚀
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A stunning, modern portfolio showcasing Snehal Das's AI/ML projects, skills, and expertise.
 
-## Available Scripts
+## 🎨 Features
 
-In the project directory, you can run:
+✨ **Modern Design**
+- Dark mode with blue-cyan gradient theme
+- Smooth animations and transitions
+- Responsive design (mobile-friendly)
+- Beautiful animated backgrounds
 
-### `npm start`
+🔗 **Live GitHub Integration**
+- Automatically fetches your latest projects from GitHub API
+- Shows project stars, forks, and descriptions
+- Direct links to GitHub repositories
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+📊 **Sections**
+- **Hero Section** - Eye-catching introduction
+- **About** - Background and expertise
+- **Featured Projects** - Your best AI/ML projects
+- **Skills** - Technical stack and tools
+- **Contact** - Easy ways to reach out
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🛠️ Tech Stack
 
-### `npm test`
+- **Frontend**: React 19 + Tailwind CSS
+- **Icons**: Lucide React
+- **API**: GitHub API (real-time project data)
+- **Animations**: CSS keyframes
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🚀 Getting Started
 
-### `npm run build`
+### Installation
+```bash
+cd my-portfolio
+npm install
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Development
+```bash
+npm start
+```
+Runs on http://localhost:3000
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Build for Production
+```bash
+npm run build
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🎯 Customization
 
-### `npm run eject`
+### Update Contact Information
+Edit `src/App.js` and update:
+- Email: `mailto:snehallaldas@gmail.com`
+- GitHub URL: `https://github.com/Snehallaldas`
+- Other social links
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Modify Featured Projects
+In the `fetchProjects()` function, update the `featured` array to include/exclude projects:
+```javascript
+const featured = [
+  'JobGenie-AI',
+  'deepfake-detector',
+  // ... add more projects
+];
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Change Color Scheme
+The portfolio uses Tailwind CSS colors. Key colors:
+- Blue: `blue-400`, `blue-500`
+- Cyan: `cyan-400`, `cyan-500`
+- Background: `slate-900`, `slate-800`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Edit color classes in `src/App.js` or create custom CSS in `src/App.css`.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 📱 Responsive Design
 
-## Learn More
+The portfolio is fully responsive:
+- Mobile: Single column layout
+- Tablet: Two column grid
+- Desktop: Three column grid for projects
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## ⚡ Performance
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- Fast page loads with optimized images
+- Smooth animations using CSS keyframes
+- Efficient GitHub API calls (cached data)
+- Minified production build
 
-### Code Splitting
+## 🔐 Privacy
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- No backend required
+- All data is public (GitHub API)
+- Client-side rendering only
 
-### Analyzing the Bundle Size
+## 📝 License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Built with ❤️ by Snehal Das
 
-### Making a Progressive Web App
+## 🤝 Contributing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Feel free to fork and customize this portfolio for your own use!
 
-### Advanced Configuration
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**Live Demo**: Coming soon!
+**GitHub**: https://github.com/Snehallaldas/Portfolio

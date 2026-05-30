@@ -1,0 +1,334 @@
+import React, { useState, useEffect } from 'react';
+import { Github, Mail, ExternalLink, Linkedin, Download, BookOpen } from 'lucide-react';
+import './App.css';
+
+function App() {
+  const [stats, setStats] = useState({ repos: 0, stars: 0, followers: 0 });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchGitHubStats();
+  }, []);
+
+  const fetchGitHubStats = async () => {
+    try {
+      const userRes = await fetch('https://api.github.com/users/Snehallaldas');
+      const userData = await userRes.json();
+      
+      const reposRes = await fetch('https://api.github.com/users/Snehallaldas/repos?per_page=100');
+      const reposData = await reposRes.json();
+      const totalStars = reposData.reduce((sum, repo) => sum + (repo.stargazers_count || 0), 0);
+
+      setStats({
+        repos: userData.public_repos,
+        stars: totalStars,
+        followers: userData.followers
+      });
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching GitHub stats:', error);
+      setLoading(false);
+    }
+  };
+
+  const projects = [
+    {
+      id: 1,
+      name: 'Codebase RAG System',
+      description: 'Production-ready RAG system for querying codebases with LLMs. Implements vector embeddings, semantic search, and context retrieval for intelligent code understanding and documentation.',
+      tech: ['Python', 'FastAPI', 'LLM', 'Vector DB', 'RAG'],
+      github: 'https://github.com/Snehallaldas/Codebase-Rag',
+      highlights: ['Semantic code search', 'LLM integration', 'Vector embeddings']
+    },
+    {
+      id: 2,
+      name: 'JobGenie AI',
+      description: 'AI-powered job recommendation and matching system. Uses NLP and ML models to analyze job descriptions, user profiles, and skills for intelligent career guidance.',
+      tech: ['Python', 'NLP', 'Machine Learning', 'Data Processing'],
+      github: 'https://github.com/Snehallaldas/JobGenie-AI',
+      highlights: ['Job matching', 'Profile analysis', 'ML pipeline']
+    },
+    {
+      id: 3,
+      name: 'Gemma-270M Implementation',
+      description: 'Custom implementation of Google\'s Gemma-270M language model. Includes training, fine-tuning, and deployment utilities for production-grade LLM inference.',
+      tech: ['PyTorch', 'Transformers', 'Model Training', 'Python'],
+      github: 'https://github.com/Snehallaldas',
+      highlights: ['LLM from scratch', 'Fine-tuning', 'Model optimization']
+    }
+  ];
+
+  const education = [
+    {
+      degree: 'Bachelor of Technology (B.Tech)',
+      field: 'Computer Science & Engineering',
+      school: 'Final Year',
+      status: 'Graduating July 2026',
+      details: 'Focus: Machine Learning, LLMs, MLOps'
+    }
+  ];
+
+  const learning = [
+    'Advanced LLM Fine-tuning & RLHF',
+    'Kubernetes for ML Systems',
+    'Production ML Pipelines',
+    'Vector Databases & Embeddings'
+  ];
+
+  const skills = [
+    { category: 'AI & LLMs', items: ['PyTorch', 'TensorFlow', 'Transformers', 'RAG', 'LangChain', 'Hugging Face'] },
+    { category: 'Backend', items: ['FastAPI', 'Flask', 'REST APIs', 'Python', 'Docker', 'Kubernetes'] },
+    { category: 'Data & ML Ops', items: ['Pandas', 'SQL', 'MongoDB', 'ML Pipelines', 'CI/CD', 'Jenkins'] },
+    { category: 'Tools & Cloud', items: ['Git', 'VS Code', 'GCP', 'AWS', 'Linux', 'Jupyter'] }
+  ];
+
+  return (
+    <div className="App bg-white text-gray-900">
+      {/* Navigation */}
+      <nav className="fixed top-0 w-full bg-white border-b border-gray-200 z-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+          <a href="#home" className="text-xl font-bold text-gray-900">
+            Snehal Das
+          </a>
+          <div className="hidden md:flex gap-8">
+            <a href="#projects" className="text-sm text-gray-600 hover:text-gray-900 transition">Projects</a>
+            <a href="#education" className="text-sm text-gray-600 hover:text-gray-900 transition">Education</a>
+            <a href="#skills" className="text-sm text-gray-600 hover:text-gray-900 transition">Skills</a>
+            <a href="#contact" className="text-sm text-gray-600 hover:text-gray-900 transition">Contact</a>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section id="home" className="pt-32 pb-20 px-4 max-w-6xl mx-auto">
+        <div className="text-center space-y-6">
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-900">
+            MLOps & AI Engineer
+          </h1>
+          
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Final-year CS student building production ML systems. Focused on LLMs, RAG, and scalable backend architectures.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4 flex-wrap">
+            <a 
+              href="Snehal_Das_Resume.pdf"
+              download
+              className="px-6 py-3 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition flex items-center justify-center gap-2"
+            >
+              <Download size={20} /> Resume
+            </a>
+            <a 
+              href="#projects"
+              className="px-6 py-3 border border-gray-900 text-gray-900 rounded-lg font-medium hover:bg-gray-50 transition"
+            >
+              View Projects
+            </a>
+            <a 
+              href="https://github.com/Snehallaldas"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-6 py-3 border border-gray-900 text-gray-900 rounded-lg font-medium hover:bg-gray-50 transition"
+            >
+              GitHub
+            </a>
+          </div>
+
+          <div className="flex justify-center gap-6 pt-8">
+            <a href="https://github.com/Snehallaldas" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-900 transition">
+              <Github size={24} />
+            </a>
+            <a href="mailto:snehallaldas@gmail.com" className="text-gray-600 hover:text-gray-900 transition">
+              <Mail size={24} />
+            </a>
+            <a href="https://linkedin.com/in/snehallaldas" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-900 transition">
+              <Linkedin size={24} />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* GitHub Stats */}
+      <section className="py-12 px-4 max-w-6xl mx-auto border-t border-gray-200">
+        <div className="grid md:grid-cols-3 gap-8">
+          <div className="text-center">
+            <h3 className="text-3xl font-bold text-gray-900">{loading ? '—' : stats.repos}</h3>
+            <p className="text-gray-600 mt-2">Public Repositories</p>
+          </div>
+          <div className="text-center">
+            <h3 className="text-3xl font-bold text-gray-900">{loading ? '—' : stats.stars}</h3>
+            <p className="text-gray-600 mt-2">GitHub Stars</p>
+          </div>
+          <div className="text-center">
+            <h3 className="text-3xl font-bold text-gray-900">{loading ? '—' : stats.followers}</h3>
+            <p className="text-gray-600 mt-2">GitHub Followers</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Projects */}
+      <section id="projects" className="py-20 px-4 max-w-6xl mx-auto border-t border-gray-200">
+        <h2 className="text-4xl font-bold mb-12">Featured Projects</h2>
+        
+        <div className="space-y-8">
+          {projects.map((project) => (
+            <div key={project.id} className="border border-gray-200 rounded-lg p-8 hover:border-gray-400 transition">
+              <div className="flex justify-between items-start mb-4">
+                <h3 className="text-2xl font-bold text-gray-900">{project.name}</h3>
+                <a 
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 hover:text-gray-900 transition"
+                >
+                  <ExternalLink size={24} />
+                </a>
+              </div>
+              
+              <p className="text-gray-600 text-lg mb-4">
+                {project.description}
+              </p>
+
+              <div className="mb-4">
+                <p className="text-sm font-semibold text-gray-900 mb-2">Key Features:</p>
+                <ul className="list-disc list-inside space-y-1">
+                  {project.highlights.map((highlight, idx) => (
+                    <li key={idx} className="text-gray-600 text-sm">{highlight}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                {project.tech.map((tech) => (
+                  <span 
+                    key={tech}
+                    className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="text-center mt-12 pt-12 border-t border-gray-200">
+          <p className="text-gray-600 mb-4">See more on my GitHub</p>
+          <a 
+            href="https://github.com/Snehallaldas"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-6 py-3 border border-gray-900 text-gray-900 rounded-lg font-medium hover:bg-gray-50 transition"
+          >
+            <Github size={20} /> View All Projects
+          </a>
+        </div>
+      </section>
+
+      {/* Education Section */}
+      <section id="education" className="py-20 px-4 max-w-6xl mx-auto border-t border-gray-200">
+        <h2 className="text-4xl font-bold mb-12">Education</h2>
+        
+        <div className="space-y-6">
+          {education.map((edu, idx) => (
+            <div key={idx} className="border border-gray-200 rounded-lg p-8">
+              <div className="flex justify-between items-start mb-2">
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-900">{edu.degree}</h3>
+                  <p className="text-lg text-gray-600 mt-1">{edu.field}</p>
+                </div>
+                <span className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-semibold text-sm">
+                  {edu.status}
+                </span>
+              </div>
+              <p className="text-gray-600 mt-4">{edu.details}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-12 pt-12 border-t border-gray-200">
+          <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
+            <BookOpen size={28} /> Currently Learning
+          </h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            {learning.map((item, idx) => (
+              <div key={idx} className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <p className="text-gray-900 font-medium">{item}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Skills Section */}
+      <section id="skills" className="py-20 px-4 max-w-6xl mx-auto border-t border-gray-200">
+        <h2 className="text-4xl font-bold mb-12">Skills & Technologies</h2>
+
+        <div className="grid md:grid-cols-2 gap-8">
+          {skills.map((skillGroup, idx) => (
+            <div key={idx} className="border border-gray-200 rounded-lg p-8">
+              <h3 className="text-xl font-bold mb-4 text-gray-900">{skillGroup.category}</h3>
+              <div className="flex flex-wrap gap-2">
+                {skillGroup.items.map((skill) => (
+                  <span 
+                    key={skill}
+                    className="px-3 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="py-20 px-4 max-w-6xl mx-auto border-t border-gray-200">
+        <div className="text-center space-y-8">
+          <h2 className="text-4xl font-bold">Let's Connect</h2>
+          
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+            Interested in collaborating on AI/ML projects or discussing MLOps practices? Feel free to reach out.
+          </p>
+
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <a 
+              href="mailto:snehallaldas@gmail.com"
+              className="px-8 py-4 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition flex items-center justify-center gap-2"
+            >
+              <Mail size={20} /> Email
+            </a>
+            <a 
+              href="https://github.com/Snehallaldas"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-8 py-4 border border-gray-900 text-gray-900 rounded-lg font-medium hover:bg-gray-50 transition flex items-center justify-center gap-2"
+            >
+              <Github size={20} /> GitHub
+            </a>
+            <a 
+              href="https://linkedin.com/in/snehallaldas"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-8 py-4 border border-gray-900 text-gray-900 rounded-lg font-medium hover:bg-gray-50 transition flex items-center justify-center gap-2"
+            >
+              <Linkedin size={20} /> LinkedIn
+            </a>
+          </div>
+
+          <p className="text-gray-500 text-sm">
+            snehallaldas@gmail.com
+          </p>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-gray-200 py-8 px-4 text-center text-gray-500">
+        <p>© 2026 Snehal Das. Built with React & Tailwind CSS.</p>
+      </footer>
+    </div>
+  );
+}
+
+export default App;

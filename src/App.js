@@ -1,316 +1,333 @@
 import React, { useState, useEffect } from 'react';
-import { Github, Mail, ExternalLink, ArrowRight, Code2, Brain, Zap, Star, GitFork, ChevronDown } from 'lucide-react';
+import { Github, Mail, ExternalLink, Linkedin, Download, BookOpen, Moon, Sun } from 'lucide-react';
+import { GitHubCalendar } from 'react-github-calendar';
 import './App.css';
 
 function App() {
-  const [projects, setProjects] = useState([]);
+  const [stats, setStats] = useState({ repos: 29, stars: 15, followers: 5 });
   const [loading, setLoading] = useState(true);
-  const [scrollY, setScrollY] = useState(0);
+  const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    window.addEventListener('scroll', () => setScrollY(window.scrollY));
-    fetchProjects();
+    const fetchStats = async () => {
+      try {
+        const res = await fetch('https://api.github.com/users/Snehallaldas');
+        const data = await res.json();
+        const reposRes = await fetch('https://api.github.com/users/Snehallaldas/repos?per_page=100');
+        const repos = await reposRes.json();
+        const totalStars = repos.reduce((sum, repo) => sum + (repo.stargazers_count || 0), 0);
+        setStats({
+          repos: data.public_repos || 29,
+          stars: totalStars || 15,
+          followers: data.followers || 5
+        });
+      } catch (error) {
+        console.error('Error fetching GitHub stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
   }, []);
 
-  const fetchProjects = async () => {
-    try {
-      const response = await fetch('https://api.github.com/users/Snehallaldas/repos?sort=updated&per_page=20');
-      const data = await response.json();
-      
-      const featured = [
-        'JobGenie-AI',
-        'deepfake-detector',
-        'mini-rag-from-scratch',
-        'Codebase-Rag',
-        'Text_to_speech',
-        'Fake-news-detection',
-        'titanic-survival-prediction',
-        'churn-prediction',
-        'Anime-Recommendation-System',
-        'Gun-detection',
-        'Emotion-detection',
-        'zipdeploy'
-      ];
+  // ─── Shared dark-mode class helpers ───────────────────────────────────────
+  const dm = darkMode;
+  const heading   = dm ? 'text-white'     : 'text-gray-900';
+  const muted     = dm ? 'text-gray-400'  : 'text-gray-600';
+  const body      = dm ? 'text-gray-300'  : 'text-gray-600';
+  const divider   = dm ? 'border-gray-700': 'border-gray-200';
+  const card      = `border rounded-lg ${dm ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`;
+  const tag       = `px-3 py-1 rounded-full text-sm font-medium ${dm ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'}`;
+  const btnPrimary   = `rounded-lg font-medium transition flex items-center justify-center gap-2 ${dm ? 'bg-white text-gray-900 hover:bg-gray-100' : 'bg-gray-900 text-white hover:bg-gray-800'}`;
+  const btnOutline   = `border rounded-lg font-medium transition flex items-center justify-center gap-2 ${dm ? 'border-gray-500 text-gray-200 hover:bg-gray-800' : 'border-gray-900 text-gray-900 hover:bg-gray-50'}`;
 
-      const filtered = data.filter(repo => featured.includes(repo.name));
-      setProjects(filtered);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching projects:', error);
-      setLoading(false);
+  const projects = [
+    {
+      id: 1,
+      name: 'Codebase RAG System',
+      description: 'Production-ready RAG system for querying codebases with LLMs. Implements vector embeddings, semantic search, and context retrieval for intelligent code understanding and documentation.',
+      tech: ['Python', 'FastAPI', 'LLM', 'Vector DB', 'RAG'],
+      github: 'https://github.com/Snehallaldas/Codebase-Rag',
+      highlights: ['Semantic code search', 'LLM integration', 'Vector embeddings']
+    },
+    {
+      id: 2,
+      name: 'JobGenie AI',
+      description: 'AI-powered job recommendation and matching system. Uses NLP and ML models to analyze job descriptions, user profiles, and skills for intelligent career guidance.',
+      tech: ['Python', 'NLP', 'Machine Learning', 'Data Processing'],
+      github: 'https://github.com/Snehallaldas/JobGenie-AI',
+      highlights: ['Job matching', 'Profile analysis', 'ML pipeline']
+    },
+    {
+      id: 3,
+      name: 'Gemma-270M Implementation',
+      description: "Custom implementation of Google's Gemma-270M language model. Includes training, fine-tuning, and deployment utilities for production-grade LLM inference.",
+      tech: ['PyTorch', 'Transformers', 'Model Training', 'Python'],
+      github: 'https://github.com/Snehallaldas',
+      highlights: ['LLM from scratch', 'Fine-tuning', 'Model optimization']
+    },
+    {
+      id: 4,
+      name: 'CodeSentinel',
+      description: 'AI-powered code analysis and security scanning tool. Detects vulnerabilities, code smells, and potential security issues in source code with intelligent recommendations.',
+      tech: ['HTML', 'JavaScript', 'AI Analysis', 'Code Security'],
+      github: 'https://github.com/Snehallaldas/CodeSentinel',
+      demo: 'https://snehallaldas.github.io/CodeSentinel',
+      highlights: ['Code vulnerability detection', 'Security analysis', 'Real-time scanning']
     }
-  };
+  ];
 
-  const skills = {
-    'AI/ML & Deep Learning': ['Python', 'TensorFlow', 'PyTorch', 'scikit-learn', 'LLM', 'RAG', 'Transformers'],
-    'Backend & APIs': ['FastAPI', 'Flask', 'REST APIs', 'SQL', 'Docker', 'Kubernetes'],
-    'Tools & Platforms': ['Jupyter Notebook', 'Git', 'VS Code', 'GCP', 'MLflow', 'Hugging Face'],
-    'Languages': ['Python', 'JavaScript', 'Java', 'SQL']
-  };
+  const education = [
+    {
+      degree: 'Bachelor of Technology (B.Tech)',
+      field: 'Computer Science & Engineering',
+      status: 'Graduating July 2026',
+      details: 'Focus: Machine Learning, LLMs, MLOps'
+    }
+  ];
 
-  const stats = [
-    { label: 'Public Repos', value: '29+' },
-    { label: 'Focus Areas', value: 'AI/ML' },
-    { label: 'Years Learning', value: '2+' }
+  const learning = [
+    'Advanced LLM Fine-tuning & RLHF',
+    'Kubernetes for ML Systems',
+    'Production ML Pipelines',
+    'Vector Databases & Embeddings'
+  ];
+
+  const skills = [
+    { category: 'AI & LLMs',      items: ['PyTorch', 'TensorFlow', 'Transformers', 'RAG', 'LangChain', 'Hugging Face'] },
+    { category: 'Backend',         items: ['FastAPI', 'Flask', 'REST APIs', 'Python', 'Docker', 'Kubernetes'] },
+    { category: 'Data & ML Ops',   items: ['Pandas', 'SQL', 'MongoDB', 'ML Pipelines', 'CI/CD', 'Jenkins'] },
+    { category: 'Tools & Cloud',   items: ['Git', 'VS Code', 'GCP', 'AWS', 'Linux', 'Jupyter'] }
   ];
 
   return (
-    <div className="App min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
-      {/* Animated Background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-blob"></div>
-        <div className="absolute bottom-20 right-10 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
-        <div className="absolute top-1/2 left-1/2 w-60 h-60 bg-purple-500/10 rounded-full blur-3xl animate-blob animation-delay-4000"></div>
-      </div>
+    <div className={`App ${dm ? 'dark-mode' : ''}`}>
 
-      {/* Navigation */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        scrollY > 50 ? 'bg-slate-900/90 backdrop-blur-md border-b border-slate-700/50 shadow-lg' : 'bg-transparent'
-      }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <a href="#home" className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-            Snehal
+      {/* ── Navigation ───────────────────────────────────────────────────── */}
+      <nav className={`fixed top-0 w-full z-50 border-b transition ${dm ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-200'}`}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+          <a href="#home" className={`logo ${dm ? 'text-white' : 'text-gray-900'}`}>
+            <div className="logo-circle">SD</div>
+            <span>Snehal</span>
           </a>
-          <div className="hidden md:flex gap-8">
-            <a href="#about" className="text-sm hover:text-cyan-400 transition">About</a>
-            <a href="#projects" className="text-sm hover:text-cyan-400 transition">Projects</a>
-            <a href="#skills" className="text-sm hover:text-cyan-400 transition">Skills</a>
-            <a href="#contact" className="text-sm hover:text-cyan-400 transition">Contact</a>
+          <div className="hidden md:flex gap-8 items-center">
+            {[['#projects','Projects'],['#contributions','Activity'],['#education','Education'],['#skills','Skills'],['#contact','Contact']].map(([href, label]) => (
+              <a key={href} href={href} className={`text-sm transition ${dm ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>{label}</a>
+            ))}
+            <button
+              onClick={() => setDarkMode(!dm)}
+              className={`p-2 rounded-lg transition ml-4 ${dm ? 'bg-gray-800 hover:bg-gray-700 text-yellow-400' : 'bg-gray-100 hover:bg-gray-200 text-gray-900'}`}
+              title={dm ? 'Light Mode' : 'Dark Mode'}
+            >
+              {dm ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
           </div>
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section id="home" className="min-h-screen flex items-center justify-center px-4 pt-20 relative">
-        <div className="max-w-5xl mx-auto text-center relative z-10">
-          <div className="mb-6 inline-block animate-fade-in-down">
-            <span className="px-4 py-2 rounded-full bg-blue-500/20 border border-blue-500/50 text-blue-300 text-sm font-semibold">
-              👋 Welcome to my portfolio
-            </span>
-          </div>
-          
-          <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold mb-6 leading-tight animate-fade-in">
-            Hi, I'm <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent">Snehal Das</span>
-          </h1>
-          
-          <p className="text-xl sm:text-2xl text-slate-300 mb-8 max-w-2xl mx-auto animate-fade-in-up">
-            AI/ML Enthusiast & Computer Science Student specializing in <span className="text-cyan-400 font-semibold">Deep Learning, LLMs & Production ML Systems</span>
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
+      <section id="home" className="pt-32 pb-20 px-4 max-w-6xl mx-auto">
+        <div className="text-center space-y-6">
+          <h1 className={`text-5xl md:text-6xl font-bold ${heading}`}>MLOps & AI Engineer</h1>
+          <p className={`text-xl max-w-2xl mx-auto ${muted}`}>
+            Final-year CS student building production ML systems. Focused on LLMs, RAG, and scalable backend architectures.
           </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-            <a 
-              href="#projects"
-              className="px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg font-semibold flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-cyan-500/50 transition transform hover:scale-105"
-            >
-              View My Work <ArrowRight size={20} />
+          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4 flex-wrap">
+            <a href="Snehal_Das_Resume.pdf" download className={`px-6 py-3 ${btnPrimary}`}>
+              <Download size={20} /> Resume
             </a>
-            <a 
-              href="https://github.com/Snehallaldas"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-8 py-4 border border-slate-500 rounded-lg font-semibold hover:border-cyan-400 hover:text-cyan-400 hover:bg-cyan-400/10 transition"
-            >
-              GitHub Profile
-            </a>
+            <a href="#projects" className={`px-6 py-3 ${btnOutline}`}>View Projects</a>
+            <a href="https://github.com/Snehallaldas" target="_blank" rel="noopener noreferrer" className={`px-6 py-3 ${btnOutline}`}>GitHub</a>
           </div>
-
-          <div className="flex justify-center gap-6 text-slate-400 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-            <a href="https://github.com/Snehallaldas" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 transition hover:scale-110">
-              <Github size={32} />
-            </a>
-            <a href="mailto:snehallaldas@gmail.com" className="hover:text-cyan-400 transition hover:scale-110">
-              <Mail size={32} />
-            </a>
-          </div>
-
-          <div className="mt-16 animate-bounce">
-            <ChevronDown size={32} className="mx-auto text-cyan-400/50" />
-          </div>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section id="about" className="py-20 px-4 max-w-6xl mx-auto relative z-10">
-        <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-12 border border-slate-700">
-          <h2 className="text-4xl font-bold mb-8">About Me</h2>
-          
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
-            {stats.map((stat, idx) => (
-              <div key={idx} className="text-center p-6 bg-slate-700/50 rounded-lg border border-slate-600">
-                <div className="text-3xl font-bold text-cyan-400 mb-2">{stat.value}</div>
-                <div className="text-slate-300">{stat.label}</div>
-              </div>
+          <div className="flex justify-center gap-6 pt-8">
+            {[
+              ['https://github.com/Snehallaldas', <Github size={24} />],
+              ['mailto:snehallaldas@gmail.com',   <Mail size={24} />],
+              ['https://linkedin.com/in/snehallaldas', <Linkedin size={24} />],
+            ].map(([href, icon]) => (
+              <a key={href} href={href} target="_blank" rel="noopener noreferrer"
+                className={`transition ${dm ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>
+                {icon}
+              </a>
             ))}
           </div>
-
-          <p className="text-slate-300 text-lg leading-relaxed mb-6">
-            I'm a final-year Computer Science student specializing in <span className="text-cyan-400 font-semibold">AI & Machine Learning</span>. 
-            Passionate about building intelligent solutions using deep learning, transformers, and large language models.
-          </p>
-
-          <p className="text-slate-300 text-lg leading-relaxed">
-            My focus is on creating production-ready ML systems with proper engineering practices, including 
-            <span className="text-cyan-400 font-semibold"> CI/CD pipelines, model monitoring, and scalable cloud architectures</span>.
-          </p>
         </div>
       </section>
 
-      {/* Projects Section */}
-      <section id="projects" className="py-20 px-4 max-w-6xl mx-auto relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl sm:text-5xl font-bold mb-4">Featured Projects</h2>
-          <p className="text-slate-400 text-lg">Innovative AI/ML solutions from my GitHub</p>
+      {/* ── GitHub Stats ─────────────────────────────────────────────────── */}
+      <section className={`py-12 px-4 max-w-6xl mx-auto border-t ${divider}`}>
+        <div className="grid md:grid-cols-3 gap-8">
+          {[
+            [stats.repos,     'Public Repositories'],
+            [stats.stars,     'GitHub Stars'],
+            [stats.followers, 'GitHub Followers'],
+          ].map(([value, label]) => (
+            <div key={label} className="text-center">
+              <h3 className={`text-3xl font-bold ${heading}`}>{loading ? '—' : value}</h3>
+              <p className={`mt-2 ${muted}`}>{label}</p>
+            </div>
+          ))}
         </div>
+      </section>
 
-        {loading ? (
-          <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-16 w-16 border-b-2 border-cyan-400"></div>
-          </div>
-        ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project) => (
-              <div 
-                key={project.id}
-                className="group relative bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-6 border border-slate-700 hover:border-cyan-500/50 transition transform hover:scale-105 hover:shadow-xl hover:shadow-cyan-500/10"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-cyan-500/0 to-blue-500/0 rounded-xl opacity-0 group-hover:opacity-10 transition"></div>
-                
-                <div className="relative z-10">
-                  <div className="flex items-start justify-between mb-4">
-                    <Code2 size={32} className="text-cyan-400" />
-                    <div className="flex gap-2">
-                      {project.stargazers_count > 0 && (
-                        <span className="flex items-center gap-1 text-yellow-400 text-sm bg-yellow-400/10 px-2 py-1 rounded-full">
-                          <Star size={14} /> {project.stargazers_count}
-                        </span>
-                      )}
-                      {project.forks_count > 0 && (
-                        <span className="flex items-center gap-1 text-green-400 text-sm bg-green-400/10 px-2 py-1 rounded-full">
-                          <GitFork size={14} /> {project.forks_count}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  
-                  <h3 className="text-xl font-bold mb-2 group-hover:text-cyan-400 transition line-clamp-2">
-                    {project.name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-                  </h3>
-                  
-                  <p className="text-slate-400 text-sm mb-4 h-10 line-clamp-2">
-                    {project.description || 'An interesting AI/ML project built with passion'}
-                  </p>
-                  
-                  {project.language && (
-                    <div className="mb-4 flex flex-wrap gap-2">
-                      <span className="inline-block bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full text-xs font-semibold">
-                        {project.language}
-                      </span>
-                      <span className="inline-block bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full text-xs font-semibold">
-                        ML
-                      </span>
-                    </div>
-                  )}
-                  
-                  <a 
-                    href={project.html_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-cyan-400 font-semibold text-sm hover:text-cyan-300 transition"
-                  >
-                    View Code <ExternalLink size={16} />
+      {/* ── Featured Projects ─────────────────────────────────────────────── */}
+      <section id="projects" className={`py-20 px-4 max-w-6xl mx-auto border-t ${divider}`}>
+        <h2 className={`text-4xl font-bold mb-12 ${heading}`}>Featured Projects</h2>
+        <div className="space-y-8">
+          {projects.map((project) => (
+            <div key={project.id} className={`${card} p-8 transition hover:border-gray-500`}>
+              <div className="flex justify-between items-start mb-4">
+                <h3 className={`text-2xl font-bold ${heading}`}>{project.name}</h3>
+                <a href={project.github} target="_blank" rel="noopener noreferrer"
+                  className={`transition ${dm ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>
+                  <ExternalLink size={24} />
+                </a>
+              </div>
+              <p className={`text-lg mb-4 ${body}`}>{project.description}</p>
+              <div className="mb-4">
+                <p className={`text-sm font-semibold mb-2 ${heading}`}>Key Features:</p>
+                <ul className="list-disc list-inside space-y-1">
+                  {project.highlights.map((h, i) => (
+                    <li key={i} className={`text-sm ${muted}`}>{h}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="flex flex-wrap gap-2 mb-6">
+                {project.tech.map((t) => <span key={t} className={tag}>{t}</span>)}
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <a href={project.github} target="_blank" rel="noopener noreferrer"
+                  className={`inline-flex items-center gap-2 px-4 py-2 ${btnOutline}`}>
+                  <Github size={18} /> GitHub
+                </a>
+                {project.demo && (
+                  <a href={project.demo} target="_blank" rel="noopener noreferrer"
+                    className={`inline-flex items-center gap-2 px-4 py-2 ${btnPrimary}`}>
+                    <ExternalLink size={18} /> Live Demo
                   </a>
-                </div>
+                )}
               </div>
-            ))}
-          </div>
-        )}
-
-        <div className="text-center mt-12">
-          <a 
-            href="https://github.com/Snehallaldas"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-8 py-4 border border-cyan-500/50 rounded-lg font-semibold text-cyan-400 hover:bg-cyan-500/10 transition"
-          >
+            </div>
+          ))}
+        </div>
+        <div className={`text-center mt-12 pt-12 border-t ${divider}`}>
+          <p className={`mb-4 ${muted}`}>See more on my GitHub</p>
+          <a href="https://github.com/Snehallaldas" target="_blank" rel="noopener noreferrer"
+            className={`inline-flex items-center gap-2 px-6 py-3 ${btnOutline}`}>
             <Github size={20} /> View All Projects
           </a>
         </div>
       </section>
 
-      {/* Skills Section */}
-      <section id="skills" className="py-20 px-4 max-w-6xl mx-auto relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl sm:text-5xl font-bold mb-4">Skills & Technologies</h2>
-          <p className="text-slate-400 text-lg">Tools and frameworks I work with</p>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-8">
-          {Object.entries(skills).map(([category, items]) => (
-            <div 
-              key={category}
-              className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-8 border border-slate-700 hover:border-cyan-500/50 transition"
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-cyan-500/20 rounded-lg">
-                  {category.includes('AI') && <Brain size={24} className="text-cyan-400" />}
-                  {category.includes('Backend') && <Code2 size={24} className="text-cyan-400" />}
-                  {category.includes('Tools') && <Zap size={24} className="text-cyan-400" />}
-                  {category.includes('Languages') && <Code2 size={24} className="text-cyan-400" />}
-                </div>
-                <h3 className="text-xl font-bold">{category}</h3>
+      {/* ── GitHub Activity ───────────────────────────────────────────────── */}
+      <section id="contributions" className={`py-20 px-4 max-w-6xl mx-auto border-t ${divider}`}>
+        <h2 className={`text-4xl font-bold mb-12 ${heading}`}>GitHub Activity</h2>
+        <div className={`border rounded-lg p-8 overflow-x-auto ${dm ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'}`}>
+          <div className="mb-8">
+            <h3 className={`text-xl font-bold mb-4 ${heading}`}>Contribution Calendar</h3>
+            <div className={`p-6 rounded-lg border overflow-x-auto ${dm ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'}`}>
+              <GitHubCalendar username="Snehallaldas" colorScheme={dm ? 'dark' : 'light'} />
+            </div>
+            <p className={`text-sm mt-4 ${muted}`}>
+              Shows my commit activity over the past year. Green squares indicate days with contributions.
+            </p>
+          </div>
+          <div className={`mt-8 pt-8 border-t ${divider} grid md:grid-cols-2 gap-6`}>
+            {[
+              ['Most Active',   'Weekdays',   'Monday, Wednesday, Friday'],
+              ['Commit Streak', 'Consistent', 'Regular development & contributions'],
+            ].map(([label, value, sub]) => (
+              <div key={label} className={`text-center p-6 rounded-lg border ${dm ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'}`}>
+                <h3 className={`text-sm font-semibold mb-2 ${muted}`}>{label}</h3>
+                <p className={`text-2xl font-bold ${heading}`}>{value}</p>
+                <p className={`text-sm mt-1 ${muted}`}>{sub}</p>
               </div>
-              
+            ))}
+          </div>
+          <div className="mt-8 text-center">
+            <a href="https://github.com/Snehallaldas" target="_blank" rel="noopener noreferrer"
+              className={`inline-flex items-center gap-2 px-6 py-3 ${btnPrimary}`}>
+              <Github size={20} /> View Full Profile
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Education ────────────────────────────────────────────────────── */}
+      <section id="education" className={`py-20 px-4 max-w-6xl mx-auto border-t ${divider}`}>
+        <h2 className={`text-4xl font-bold mb-12 ${heading}`}>Education</h2>
+        <div className="space-y-6">
+          {education.map((edu, idx) => (
+            <div key={idx} className={`${card} p-8`}>
+              <div className="flex justify-between items-start mb-2">
+                <div>
+                  <h3 className={`text-2xl font-bold ${heading}`}>{edu.degree}</h3>
+                  <p className={`text-lg mt-1 ${muted}`}>{edu.field}</p>
+                </div>
+                <span className={`px-4 py-2 rounded-lg font-semibold text-sm ${dm ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'}`}>
+                  {edu.status}
+                </span>
+              </div>
+              <p className={`mt-4 ${muted}`}>{edu.details}</p>
+            </div>
+          ))}
+        </div>
+        <div className={`mt-12 pt-12 border-t ${divider}`}>
+          <h3 className={`text-2xl font-bold mb-6 flex items-center gap-2 ${heading}`}>
+            <BookOpen size={28} /> Currently Learning
+          </h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            {learning.map((item, idx) => (
+              <div key={idx} className={`p-4 rounded-lg border ${dm ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-200'}`}>
+                <p className={`font-medium ${heading}`}>{item}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Skills ───────────────────────────────────────────────────────── */}
+      <section id="skills" className={`py-20 px-4 max-w-6xl mx-auto border-t ${divider}`}>
+        <h2 className={`text-4xl font-bold mb-12 ${heading}`}>Skills & Technologies</h2>
+        <div className="grid md:grid-cols-2 gap-8">
+          {skills.map((group, idx) => (
+            <div key={idx} className={`${card} p-8`}>
+              <h3 className={`text-xl font-bold mb-4 ${heading}`}>{group.category}</h3>
               <div className="flex flex-wrap gap-2">
-                {items.map((skill) => (
-                  <span 
-                    key={skill}
-                    className="px-3 py-2 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-500/30 text-blue-300 rounded-full text-sm font-medium hover:border-blue-400/60 hover:text-cyan-300 transition cursor-default"
-                  >
-                    {skill}
-                  </span>
-                ))}
+                {group.items.map((skill) => <span key={skill} className={tag}>{skill}</span>)}
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-20 px-4 max-w-4xl mx-auto relative z-10">
-        <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-12 border border-slate-700 text-center">
-          <h2 className="text-4xl font-bold mb-4">Let's Connect!</h2>
-          <p className="text-slate-400 text-lg mb-8 max-w-xl mx-auto">
-            I'm always interested in AI/ML projects, learning opportunities, and collaborations. 
-            Feel free to reach out!
+      {/* ── Contact ──────────────────────────────────────────────────────── */}
+      <section id="contact" className={`py-20 px-4 max-w-6xl mx-auto border-t ${divider}`}>
+        <div className="text-center space-y-8">
+          <h2 className={`text-4xl font-bold ${heading}`}>Let's Connect</h2>
+          <p className={`text-lg max-w-2xl mx-auto ${muted}`}>
+            Interested in collaborating on AI/ML projects or discussing MLOps practices? Feel free to reach out.
           </p>
-          
-          <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
-            <a 
-              href="https://github.com/Snehallaldas"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-8 py-4 bg-slate-700/50 border border-slate-600 rounded-lg hover:border-cyan-400 hover:bg-cyan-400/10 transition flex items-center justify-center gap-2"
-            >
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="mailto:snehallaldas@gmail.com" className={`px-8 py-4 ${btnPrimary}`}>
+              <Mail size={20} /> Email
+            </a>
+            <a href="https://github.com/Snehallaldas" target="_blank" rel="noopener noreferrer" className={`px-8 py-4 ${btnOutline}`}>
               <Github size={20} /> GitHub
             </a>
-            <a 
-              href="mailto:snehallaldas@gmail.com"
-              className="px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg hover:shadow-lg hover:shadow-cyan-500/50 transition flex items-center justify-center gap-2 font-semibold"
-            >
-              <Mail size={20} /> Email Me
+            <a href="https://linkedin.com/in/snehallaldas" target="_blank" rel="noopener noreferrer" className={`px-8 py-4 ${btnOutline}`}>
+              <Linkedin size={20} /> LinkedIn
             </a>
           </div>
-
-          <p className="text-slate-500 text-sm">
-            📧 snehallaldas@gmail.com | 🐙 github.com/Snehallaldas
-          </p>
+          <p className={`text-sm ${muted}`}>snehallaldas@gmail.com</p>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-slate-700/50 py-8 px-4 text-center text-slate-500 relative z-10">
-        <p>© 2026 Snehal Das. Built with React, Tailwind CSS & ❤️</p>
+      {/* ── Footer ───────────────────────────────────────────────────────── */}
+      <footer className={`border-t py-8 px-4 text-center ${divider} ${muted}`}>
+        <p>© 2026 Snehal Das. Built with React & Tailwind CSS.</p>
       </footer>
+
     </div>
   );
 }

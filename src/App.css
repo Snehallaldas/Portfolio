@@ -1,94 +1,87 @@
-/* Blob Animation */
-@keyframes blob {
-  0%, 100% {
-    transform: translate(0, 0) scale(1);
-  }
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
-  }
-  66% {
-    transform: translate(-20px, 20px) scale(0.9);
-  }
-}
-
-.animate-blob {
-  animation: blob 7s infinite;
-}
-
-.animation-delay-2000 {
-  animation-delay: 2s;
-}
-
-.animation-delay-4000 {
-  animation-delay: 4s;
-}
-
-/* Fade In Animations */
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-in-down {
-  animation: fadeInDown 0.8s ease-out;
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.8s ease-out;
-  animation-delay: 0.1s;
-  animation-fill-mode: both;
-}
-
-.animate-fade-in-up {
-  animation: fadeInUp 0.8s ease-out;
-  animation-fill-mode: both;
-}
-
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+}
+
+/* Typography */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
-
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.5);
+  background: #f5f5f5;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #3b82f6, #06b6d4);
+  background: #d1d5db;
   border-radius: 4px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #60a5fa, #22d3ee);
+  background: #9ca3af;
+}
+
+/* Dark Mode — page background */
+.App.dark-mode {
+  background-color: #111827;
+  color: #f3f4f6;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Dark Mode — scrollbar */
+.App.dark-mode ::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+.App.dark-mode ::-webkit-scrollbar-thumb {
+  background: #4b5563;
+}
+.App.dark-mode ::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Smooth transitions */
+a, button {
+  transition: all 0.2s ease;
+}
+
+/* Logo — color inherits from parent so dark/light span text works */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  /* removed hardcoded color: #111827 — now controlled by className in JSX */
+}
+
+/* Animated logo circle */
+.logo-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  flex-shrink: 0;
+  animation: rotateLogo 6s linear infinite;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+@keyframes rotateLogo {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.logo-circle:hover {
+  animation-play-state: paused;
 }

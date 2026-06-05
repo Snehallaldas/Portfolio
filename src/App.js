@@ -133,7 +133,7 @@ function App() {
             Final-year CS student building production ML systems. Focused on LLMs, RAG, and scalable backend architectures.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4 flex-wrap">
-            <a href="Snehal_Lal_Das_Resume.pdf" download className={`px-6 py-3 ${btnPrimary}`}>
+            <a href={`${process.env.PUBLIC_URL}/Snehal_Lal_Das_Resume.pdf`} download="Snehal_Lal_Das_Resume.pdf" className={`px-6 py-3 ${btnPrimary}`}>
               <Download size={20} /> Resume
             </a>
             <a href="#projects" className={`px-6 py-3 ${btnOutline}`}>View Projects</a>

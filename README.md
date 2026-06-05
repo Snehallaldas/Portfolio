@@ -104,5 +104,5 @@ Feel free to fork and customize this portfolio for your own use!
 
 ---
 
-**Live Demo**: Coming soon!
+**Live Demo**: https://portfolio-snehallaldas-projects.vercel.app/?_vercel_share=3IKtyEM855zEIEo6GIh1hbcBQ6YbuBfT
 **GitHub**: https://github.com/Snehallaldas/Portfolio
